@@ -1,0 +1,136 @@
+:root {
+    --bg-color: #f4f7f6;
+    --card-bg: #ffffff;
+    --text-color: #2c3e50;
+    --primary-green: #27ae60;
+    --accent-gold: #f39c12;
+    --danger-red: #e74c3c;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.game-container {
+    background: var(--card-bg);
+    width: 100%;
+    max-width: 650px;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    box-sizing: border-box;
+}
+
+header h1 {
+    margin: 0;
+    color: var(--primary-green);
+    text-align: center;
+}
+
+.subtitle {
+    margin: 5px 0 20px 0;
+    text-align: center;
+    font-style: italic;
+    color: #7f8c8d;
+}
+
+/* Painel de Status */
+.status-panel {
+    display: flex;
+    justify-content: space-between;
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+    border: 1px solid #e2e8f0;
+}
+
+.stat-box {
+    width: 48%;
+    display: flex;
+    flex-direction: column;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.progress-bar {
+    background: #e2e8f0;
+    border-radius: 6px;
+    height: 12px;
+    width: 100%;
+    margin: 5px 0;
+    overflow: hidden;
+}
+
+.progress {
+    height: 100%;
+    width: 50%;
+    transition: width 0.5s ease-in-out;
+}
+
+.fill-lucro { background-color: var(--accent-gold); }
+.fill-ambient { background-color: var(--primary-green); }
+
+/* Corpo do Jogo */
+.scenario-text {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    min-height: 80px;
+}
+
+.feedback-text {
+    font-size: 0.95rem;
+    background: #edf2f7;
+    padding: 12px;
+    border-left: 4px solid var(--primary-green);
+    border-radius: 4px;
+    margin-bottom: 25px;
+    animation: fadeIn 0.3s ease;
+}
+
+.hidden { display: none; }
+
+/* Botões */
+.choice-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.btn {
+    background: #ffffff;
+    border: 2px solid #cbd5e1;
+    padding: 14px 20px;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s ease;
+}
+
+.btn:hover {
+    background: #f1f5f9;
+    border-color: var(--primary-green);
+    transform: translateY(-2px);
+}
+
+footer {
+    margin-top: 30px;
+    text-align: center;
+    font-size: 0.8rem;
+    color: #a0aec0;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
