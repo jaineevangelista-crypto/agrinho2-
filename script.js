@@ -1,23 +1,18 @@
-// Estado inicial do jogo
-let lucro = 50;
-let preservacao = 50;
-let rodadaAtual = 0;
-
-// Banco de dados dos desafios (Dicionário de Rodadas)
+// Banco de dados dos desafios do Agrinho
 const desafios = [
     {
         id: 1,
-        texto: "⚠️ SURGIMENTO DE PRAGA: Uma infestação severa de lagartas surgiu na plantação de milho, ameaçando destruir metade da colheita desta temporada.",
+        texto: "⚠️ SURGIMENTO DE PRAGA: Uma infestação severa de lagartas surgiu na plantação de milho, ameaçando destruir metade da colheita desta temporada. O que você faz?",
         opcoes: [
             {
                 texto: "Aplicar defensivo químico tradicional de ação rápida.",
-                feedback: "O produto salvou a colheita rapidamente garantindo o lucro, mas contaminou o solo e afastou polinizadores da região.",
+                feedback: "O produto químico salvou a colheita rapidamente garantindo o lucro, mas contaminou o solo e afastou polinizadores essenciais da região.",
                 efeitoLucro: 20,
                 efeitoPreservacao: -20
             },
             {
                 texto: "Utilizar controle biológico (vespas parasitoides) e defensivos naturais.",
-                feedback: "O controle demorou um pouco mais e custou mais caro no início, mas restabeleceu o equilíbrio ecológico sem agredir a terra.",
+                feedback: "O controle biológico demorou um pouco mais e custou mais caro no início, mas restabeleceu o equilíbrio ecológico sem agredir a terra.",
                 efeitoLucro: -10,
                 efeitoPreservacao: 25
             }
@@ -25,17 +20,17 @@ const desafios = [
     },
     {
         id: 2,
-        texto: "💧 ESCASSEZ DE ÁGUA: A região enfrenta uma forte estiagem. Você precisa decidir como gerenciar a irrigação da sua propriedade.",
+        texto: "💧 ESCASSEZ DE ÁGUA: A região enfrenta uma forte estiagem e racionamento. Você precisa gerenciar o consumo hídrico da sua lavoura.",
         opcoes: [
             {
-                texto: "Manter o sistema de irrigação por inundação atual para não gastar com reformas.",
-                feedback: "Você economizou capital imediato, mas houve um desperdício massivo de água e os lençóis freáticos secaram severamente.",
+                texto: "Manter o sistema de irrigação por inundação atual para economizar capital.",
+                feedback: "Você economizou dinheiro imediato, mas causou um desperdício massivo de água e reduziu drasticamente os lençóis freáticos locais.",
                 efeitoLucro: 15,
                 efeitoPreservacao: -25
             },
             {
-                texto: "Investir em um sistema modernizado de gotejamento automatizado.",
-                feedback: "O investimento inicial reduziu seu caixa, mas a economia de água foi drástica e a produtividade se manteve estável a longo prazo.",
+                texto: "Investir em um sistema moderno de gotejamento automatizado.",
+                feedback: "O investimento inicial reduziu seu caixa, mas a economia de água foi imensa e sua produtividade ficou protegida a longo prazo.",
                 efeitoLucro: -20,
                 efeitoPreservacao: 30
             }
@@ -43,126 +38,122 @@ const desafios = [
     },
     {
         id: 3,
-        texto: "🔋 ENERGIA NA FAZENDA: Os custos com energia elétrica para os galpões de armazenamento e maquinários dispararam este mês.",
+        texto: "🔋 MATRIZ ENERGÉTICA: Os custos com energia elétrica para manter os galpões de resfriamento e maquinários dispararam.",
         opcoes: [
             {
-                texto: "Continuar utilizando a rede elétrica comum baseada em termelétricas.",
-                feedback: "Sem gastos extras para instalar equipamentos, mas sua pegada de carbono continuou alta e os custos fixos continuam subindo.",
+                texto: "Manter a fazenda conectada apenas à rede elétrica convencional.",
+                feedback: "Sem novos investimentos financeiros, porém sua pegada de carbono continua alta e sua fazenda fica vulnerável a novos aumentos de tarifas.",
                 efeitoLucro: 5,
                 efeitoPreservacao: -10
             },
             {
-                texto: "Instalar painéis de energia solar fotovoltaica na propriedade.",
-                feedback: "Alto investimento financeiro inicial, mas a fazenda agora é autossustentável energeticamente e reduziu a emissão de gases.",
-                efeitoLucro: -15,
-                efeitoPreservacao: 20
+                texto: "Instalar placas de energia solar fotovoltaica na propriedade.",
+                feedback: "Alto investimento de capital inicial, mas agora a fazenda gera energia limpa, reduz emissões e zera a conta de luz operacional.",
+                efeitoLucro: -25,
+                efeitoPreservacao: 25
             }
         ]
     }
 ];
 
-// Elementos da interface
-const textoCenario = document.getElementById("scenario-text");
-const textoFeedback = document.getElementById("feedback-text");
-const containerBotoes = document.getElementById("choice-buttons");
-const barraLucro = document.getElementById("lucro-bar");
-const barraPreservacao = document.getElementById("preservacao-bar");
+// Estado global do Jogo
+let lucro = 50;
+let preservacao = 50;
+let rodadaAtual = 0;
+
+// Seleção de elementos do DOM
+const elemCenario = document.getElementById("scenario-text");
+const elemFeedbackBox = document.getElementById("feedback-box");
+const elemFeedbackText = document.getElementById("feedback-text");
+const elemButtonGroup = document.getElementById("button-group");
+const barLucro = document.getElementById("lucro-bar");
+const barPreservacao = document.getElementById("preservacao-bar");
 const valLucro = document.getElementById("lucro-val");
 const valPreservacao = document.getElementById("preservacao-val");
 
-// Inicializa o jogo
 function iniciarJogo() {
     lucro = 50;
     preservacao = 50;
     rodadaAtual = 0;
-    textoFeedback.classList.add("hidden");
-    atualizarInterface();
-    mostrarDesafio();
+    atualizarStatus();
+    carregarRodada();
 }
 
-// Atualiza as barras visuais de status
-function atualizarInterface() {
-    // Garante que os valores fiquem entre 0 e 100
+function atualizarStatus() {
+    // Garante travas lógicas entre os limites de 0 e 100
     lucro = Math.max(0, Math.min(100, lucro));
     preservacao = Math.max(0, Math.min(100, preservacao));
 
-    barraLucro.style.width = `${lucro}%`;
-    barraPreservacao.style.width = `${preservacao}%`;
-
+    barLucro.style.width = `${lucro}%`;
+    barPreservacao.style.width = `${preservacao}%`;
     valLucro.innerText = `${lucro}%`;
     valPreservacao.innerText = `${preservacao}%`;
 }
 
-// Renderiza o desafio atual na tela
-function mostrarDesafio() {
-    containerBotoes.innerHTML = "";
+function carregarRodada() {
+    elemFeedbackBox.classList.add("hidden");
+    elemButtonGroup.innerHTML = "";
 
-    // Verifica condições de Game Over ou Vitória antes de prosseguir
+    // Validações de Game Over e Vitória por turno
     if (lucro <= 0) {
-        finalizarJogo("❌ FALEU! Suas decisões financeiras levaram a fazenda à falência. Sem dinheiro, a sustentabilidade não se sustenta.");
+        mostrarFimJogo("❌ FALÊNCIA! Suas finanças zeraram. Uma fazenda sem lucro não consegue se manter de pé nem investir em tecnologia.");
         return;
     }
     if (preservacao <= 0) {
-        finalizarJogo("❌ DESASTRE AMBIENTAL! A terra se tornou infértil, a água secou e a propriedade foi multada e interditada pelos órgãos ambientais.");
+        mostrarFimJogo("❌ DESASTRE AMBIENTAL! A preservação zerou. O solo se esgotou, a água secou e a propriedade foi severamente interditada.");
         return;
     }
-
-    // Se passarem todas as rodadas com sucesso
     if (rodadaAtual >= desafios.length) {
         if (lucro >= 50 && preservacao >= 50) {
-            finalizarJogo("🏆 GESTOR DE EXCELÊNCIA! Você provou que é possível ter uma produção altamente lucrativa em harmonia perfeita com o meio ambiente. Parabéns!");
+            mostrarFimJogo("🏆 GESTOR SUSTENTÁVEL VENCEDOR! Você alcançou o equilíbrio perfeito. Mostrou que o agro pode produzir com alto lucro e respeitando o meio ambiente!");
         } else {
-            finalizarJogo("🏁 FIM DE JOGO! Você conseguiu terminar o período de gestão, mas não alcançou o equilíbrio ideal sustentável. Tente novamente!");
+            mostrarFimJogo("🏁 FIM DE JOGO! Você completou os anos de gestão, mas não atingiu as metas ideais de equilíbrio sustentável. Tente balancear melhor suas decisões!");
         }
         return;
     }
 
     const desafio = desafios[rodadaAtual];
-    textoCenario.innerText = desafio.texto;
+    elemCenario.innerText = desafio.texto;
 
-    // Criar botões para cada opção do desafio
     desafio.opcoes.forEach(opcao => {
         const botao = document.createElement("button");
         botao.className = "btn";
         botao.innerText = opcao.texto;
-        botao.onclick = () => processarEscolha(opcao);
-        containerBotoes.appendChild(botao);
+        botao.onclick = () => aplicarDecisao(opcao);
+        elemButtonGroup.appendChild(botao);
     });
 }
 
-// Processa a escolha feita pelo usuário
-function processarEscolha(opcao) {
+function aplicarDecisao(opcao) {
     lucro += opcao.efeitoLucro;
     preservacao += opcao.efeitoPreservacao;
+    atualizarStatus();
 
-    atualizarInterface();
+    elemFeedbackText.innerText = opcao.feedback;
+    elemFeedbackBox.classList.remove("hidden");
 
-    // Mostra o feedback da ação realizada
-    textoFeedback.innerText = opcao.feedback;
-    textoFeedback.classList.remove("hidden");
-
-    // Avança para o próximo desafio
-    rodadaAtual++;
-    
-    // Pequeno delay para o jogador ler o cenário novo mantendo o feedback anterior visível
-    mostrarDesafio();
+    elemButtonGroup.innerHTML = "";
+    const btnAvancar = document.createElement("button");
+    btnAvancar.className = "btn btn-action";
+    btnAvancar.innerText = "Avançar para o Próximo Desafio ➔";
+    btnAvancar.onclick = () => {
+        rodadaAtual++;
+        carregarRodada();
+    };
+    elemButtonGroup.appendChild(btnAvancar);
 }
 
-// Finaliza o jogo mostrando o desfecho
-function finalizarJogo(mensagemFinal) {
-    textoCenario.innerText = mensagemFinal;
-    textoFeedback.classList.add("hidden");
-    containerBotoes.innerHTML = "";
+function mostrarFimJogo(mensagemFinal) {
+    elemCenario.innerText = mensagemFinal;
+    elemFeedbackBox.classList.add("hidden");
+    elemButtonGroup.innerHTML = "";
 
-    // Criar botão de reiniciar
-    const botaoReiniciar = document.createElement("button");
-    botaoReiniciar.className = "btn";
-    botaoReiniciar.style.borderColor = "var(--primary-green)";
-    botaoReiniciar.style.textAlign = "center";
-    botaoReiniciar.innerText = "🔄 Jogar Novamente";
-    botaoReiniciar.onclick = iniciarJogo;
-    containerBotoes.appendChild(botaoReiniciar);
+    const btnReiniciar = document.createElement("button");
+    btnReiniciar.className = "btn btn-action";
+    btnReiniciar.innerText = "🔄 Reiniciar Simulação";
+    btnReiniciar.onclick = iniciarJogo;
+    elemButtonGroup.appendChild(btnReiniciar);
 }
 
-// Executa ao carregar a página
+// Inicializa a árvore de eventos da aplicação
 window.onload = iniciarJogo;

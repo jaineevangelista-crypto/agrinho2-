@@ -3,46 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>O Gestor Sustentável - Jogo de Decisão</title>
+    <title>O Gestor Sustentável - Agrinho</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
     <div class="game-container">
         <header>
             <h1>O Gestor Sustentável</h1>
-            <p class="subtitle">Equilibre suas finanças e o meio ambiente</p>
+            <p class="subtitle">Desafio de Storytelling Interativo — Agrinho</p>
         </header>
 
         <div class="status-panel">
             <div class="stat-box">
-                <span>💰 Lucro:</span>
-                <div class="progress-bar">
-                    <div id="lucro-bar" class="progress fill-lucro" style="width: 50%;"></div>
+                <div class="stat-label">💰 Lucro</div>
+                <div class="progress-container">
+                    <div id="lucro-bar" class="progress-bar fill-lucro"></div>
                 </div>
-                <span id="lucro-val">50%</span>
+                <div id="lucro-val" class="stat-value">50%</div>
             </div>
             <div class="stat-box">
-                <span>🌱 Preservação:</span>
-                <div class="progress-bar">
-                    <div id="preservacao-bar" class="progress fill-ambient" style="width: 50%;"></div>
+                <div class="stat-label">🌱 Preservação</div>
+                <div class="progress-container">
+                    <div id="preservacao-bar" class="progress-bar fill-ambient"></div>
                 </div>
-                <span id="preservacao-val">50%</span>
+                <div id="preservacao-val" class="stat-value">50%</div>
             </div>
         </div>
 
         <main class="game-body">
-            <div id="scenario-text" class="scenario-text">
-                Carregando o primeiro desafio...
+            <p id="scenario-text" class="scenario-text"></p>
+            
+            <div id="feedback-box" class="feedback-box hidden">
+                <p id="feedback-text"></p>
             </div>
-
-            <div id="feedback-text" class="feedback-text hidden"></div>
-
-            <div id="choice-buttons" class="choice-buttons">
-                </div>
         </main>
 
+        <div id="button-group" class="button-group"></div>
+
         <footer>
-            <p>Projeto desenvolvido para o Programa Agrinho</p>
+            <p>Projeto focado em Agricultura Sustentável e Práticas do Campo</p>
         </footer>
     </div>
 
